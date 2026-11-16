@@ -2,7 +2,7 @@
 
 > **Caso fictício.** A empresa EduData, as escolas, as datas e os números deste projeto foram criados para um exercício do curso Análise de Dados e TI aplicada à Gestão (Prepara Portugal). Não são dados reais.
 
-**Autora:** Daniela Ramos, advogada brasileira vivendo em Portugal, em transição para tecnologia e IA.
+**Autora:** Daniela Ramos. Bacharel em Direito (OAB/Brasil), com experiência em gestão de processos e coordenação de equipes; estudante de dados e IA.
 
 ## O problema
 
