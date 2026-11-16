@@ -51,7 +51,6 @@ O próximo passo seria um piloto com 6 a 8 escolas reais durante dois meses, com
 |---|---|
 | [`index.html`](index.html) | Apresentação, do conceito aos resultados. Abre no navegador. |
 | [`dashboard/index.html`](dashboard/index.html) | Planilha interativa da simulação: os parâmetros e os dados podem ser alterados, e os resultados são recalculados. |
-| [`aula/aula.md`](aula/aula.md) | Aula sobre os conceitos usados (GTM, lead, conversão, churn, regra de sinais, janela de tempo, métricas), com exemplos e exercícios com correção. |
 | [`planilha/`](planilha/) | Dados da simulação e as fórmulas da planilha, em texto. |
 
 ## Documentos de origem
