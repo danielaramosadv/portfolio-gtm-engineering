@@ -57,8 +57,9 @@ O próximo passo seria um piloto com 6 a 8 escolas reais durante dois meses, com
 ## Documentos de origem
 
 - Estudo de caso completo, com as partes 1 a 4 do exercício: [Notion](https://app.notion.com/p/Exerc-cio-GTM-Engineering-Parte-1-Diagn-stico-41690545a6f48162ac8df34102beaee8)
-- Fluxograma do processo: [Miro](https://miro.com/app/board/uXjVEOE7UM4=/?share_link_id=261552555169)
+- Fluxograma do processo: [Miro](https://miro.com/app/board/uXjVEOE7UM4=/?share_link_id=352690632729)
 - Planilha da simulação no Google Sheets: [Planilha](https://docs.google.com/spreadsheets/d/1uRf08qulpb-NUJR8dnVT0MUVtd1jTdcAbuN4e0R8P90/edit?usp=sharing)
+- Versão publicada no Claude (privada: só abre com permissão de quem recebeu o link): https://claude.ai/artifact/PhdHYQZ7Pt7tcV3qcKmizT
 
 ## Uso de IA
 
