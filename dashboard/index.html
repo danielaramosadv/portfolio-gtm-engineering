@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Simulação de churn EduData</title>
+<meta name="description" content="Planilha interativa da simulação de monitoramento de risco de churn. Caso fictício.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;600;700&display=swap">
+<style>
+/* Layout: uma página, cabeçalho com parâmetros, indicadores, tabela editável e alertas. */
+:root {
+  --petrol: #1B4D56;
+  --petrol-deep: #123840;
+  --forest: #2E5E3E;
+  --beige: #F5EEE3;
+  --cream: #FBF7F0;
+  --copper: #94531F;
+  --copper-soft: #E0A77A;
+  --ink: #163E46;
+  --muted: #4A5A5C;
+  --line: #D8CDBA;
+  --alert-bg: #F3E3D2;
+  --ok-bg: #DDE8DC;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--beige);
+  color: var(--ink);
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+h1, h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; color: var(--ink); margin: 0; text-wrap: balance; }
+h1 { font-size: 40px; line-height: 1.1; }
+h2 { font-size: 28px; line-height: 1.15; margin-bottom: 12px; }
+p { margin: 0; }
+.wrap { max-width: 1200px; margin: 0 auto; }
+.top { background: var(--petrol); color: var(--beige); border-radius: 4px; padding: 32px 36px; }
+.top h1 { color: var(--beige); }
+.top .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--copper-soft); margin-bottom: 12px; }
+.top .note { margin-top: 12px; color: var(--beige); max-width: 760px; }
+.panel { background: var(--cream); border-top: 5px solid var(--forest); padding: 24px 28px; margin-top: 20px; }
+.params { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+input[type="number"], input[type="text"] {
+  width: 100%; font: inherit; font-size: 16px; padding: 8px 10px;
+  border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 2px;
+}
+input:focus { outline: 3px solid var(--copper-soft); outline-offset: 1px; }
+.hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; }
+.kpi { background: var(--cream); padding: 20px 22px; border-left: 4px solid var(--petrol); }
+.kpi .v { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 48px; font-weight: 700; line-height: 1; color: var(--petrol); }
+.kpi .l { font-size: 13px; font-weight: 600; margin-top: 8px; color: var(--ink); }
+.kpi .s { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.tablebox { overflow-x: auto; margin-top: 20px; background: var(--cream); border-top: 5px solid var(--forest); }
+table { width: 100%; border-collapse: collapse; min-width: 1100px; font-size: 14px; }
+th, td { padding: 10px 10px; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--line); }
+th { font-size: 12px; font-weight: 600; color: var(--petrol); text-transform: none; background: var(--beige); position: sticky; top: 0; }
+td input { min-width: 0; padding: 6px 8px; font-size: 14px; }
+td input[type="number"] { width: 90px; }
+td input[type="text"] { width: 130px; }
+.badge { display: inline-block; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 2px; }
+.b-alert { background: var(--alert-bg); color: var(--copper); }
+.b-ok { background: var(--ok-bg); color: var(--forest); }
+.match { font-weight: 600; font-size: 13px; }
+.m-yes { color: var(--forest); }
+.m-no { color: var(--copper); }
+.sinais { font-size: 13px; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 16px; }
+button {
+  font: inherit; font-size: 14px; font-weight: 600; padding: 10px 16px; cursor: pointer;
+  background: var(--petrol); color: var(--beige); border: 0; border-radius: 2px;
+}
+button:hover { background: var(--petrol-deep); }
+button:focus-visible { outline: 3px solid var(--copper-soft); outline-offset: 2px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } .top { padding: 24px; } h1 { font-size: 32px; } }
+.rules p { margin-bottom: 8px; font-size: 14px; }
+.rules strong { color: var(--petrol); }
+ul.alerts { list-style: none; padding: 0; margin: 0; }
+ul.alerts li { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+ul.alerts li:last-child { border-bottom: 0; }
+.muted { color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Prepara Portugal · GTM Engineering · EduData</p>
+  <h1>Simulação de monitoramento de churn</h1>
+  <p class="note">Caso fictício. As escolas, datas e números foram criados para o exercício. Altere os parâmetros e os dados abaixo: os resultados são recalculados na hora.</p>
+</header>
+
+<section class="panel" aria-labelledby="h-params">
+  <h2 id="h-params">Parâmetros da regra</h2>
+  <p class="muted" style="margin-bottom:16px">Item 4.4 da Parte 2: a escola entra em risco se tiver pelo menos um sinal.</p>
+  <div class="params">
+    <div><label for="p-queda">Queda de acessos (%)</label><input type="number" id="p-queda" value="30" min="0" max="100" step="1"><p class="hint">Hipótese inicial: 30% ou mais dispara o sinal.</p></div>
+    <div><label for="p-rec">Mínimo de reclamações no mês</label><input type="number" id="p-rec" value="1" min="0" step="1"><p class="hint">Qualquer reclamação dispara o sinal.</p></div>
+    <div><label for="p-tent">Mínimo de tentativas sem resposta</label><input type="number" id="p-tent" value="2" min="0" step="1"><p class="hint">Quantas tentativas sem resposta dentro do prazo.</p></div>
+    <div><label for="p-prazo">Prazo em dias</label><input type="number" id="p-prazo" value="7" min="1" step="1"><p class="hint">Conta a partir da primeira tentativa sem resposta.</p></div>
+  </div>
+</section>
+
+<section class="kpis" aria-label="Indicadores">
+  <div class="kpi"><div class="v" id="k-alertas">0</div><div class="l">escolas em alerta</div><div class="s" id="k-alertas-s"></div></div>
+  <div class="kpi"><div class="v" id="k-churn">0%</div><div class="l">taxa de churn de novembro</div><div class="s" id="k-churn-s"></div></div>
+  <div class="kpi"><div class="v" id="k-ctt">–</div><div class="l">tempo médio alerta até contato</div><div class="s">Média das escolas em alerta com horas informadas</div></div>
+  <div class="kpi"><div class="v" id="k-sup">–</div><div class="l">tempo médio de primeira resposta do suporte</div><div class="s">Média das escolas com horas informadas</div></div>
+  <div class="kpi"><div class="v" id="k-conf">0 de 8</div><div class="l">decisões iguais ao esperado</div><div class="s">O "esperado" foi definido antes de aplicar a regra</div></div>
+</section>
+
+<section aria-labelledby="h-tab">
+  <div class="tablebox" style="margin-top:20px">
+    <table id="tab">
+      <caption style="text-align:left;padding:16px 16px 0;font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:700;color:#163E46;caption-side:top">
+        <span id="h-tab">Escolas</span>
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Escola</th>
+          <th scope="col">Acessos mês anterior</th>
+          <th scope="col">Acessos mês atual</th>
+          <th scope="col">Queda</th>
+          <th scope="col">Reclamações no mês</th>
+          <th scope="col">Dias das tentativas sem resposta (ex.: 5, 9)</th>
+          <th scope="col">Dia do cancelamento (1–30)</th>
+          <th scope="col">Horas alerta até contato</th>
+          <th scope="col">Horas até 1ª resposta do suporte</th>
+          <th scope="col">Sinais</th>
+          <th scope="col">Decisão</th>
+          <th scope="col">Esperado</th>
+          <th scope="col">Confere?</th>
+        </tr>
+      </thead>
+      <tbody id="corpo"></tbody>
+    </table>
+  </div>
+  <div class="controls">
+    <button type="button" id="btn-reset">Restaurar dados da simulação</button>
+    <span class="muted">Os dados são de entrada, preenchidos à mão, como na planilha do exercício. Em uma implementação real, viriam do Google Forms e de uma exportação da plataforma.</span>
+  </div>
+</section>
+
+<div class="grid2">
+  <section class="panel" aria-labelledby="h-alertas">
+    <h2 id="h-alertas">Alertas gerados</h2>
+    <ul class="alerts" id="lista-alertas"></ul>
+  </section>
+  <section class="panel rules" aria-labelledby="h-regras">
+    <h2 id="h-regras">Como a tabela calcula</h2>
+    <p><strong>Queda:</strong> (acessos do mês anterior − acessos do mês atual) ÷ acessos do mês anterior.</p>
+    <p><strong>Sinal de acessos:</strong> Sim se a queda for igual ou maior que o limite.</p>
+    <p><strong>Sinal de reclamação:</strong> Sim se houver pelo menos o mínimo de reclamações.</p>
+    <p><strong>Sinal de contato:</strong> pega a primeira tentativa sem resposta e conta quantas caem dentro do prazo a partir dela. Sim se a contagem atingir o mínimo.</p>
+    <p><strong>Decisão:</strong> Sim (gerar alerta) se houver pelo menos um sinal.</p>
+    <p><strong>Churn:</strong> cancelamentos em novembro ÷ 8 escolas no início do mês × 100.</p>
+    <p class="muted">Com 8 escolas, cada cancelamento pesa 12,5 pontos. Use para comparar tendências, não como medida estatística.</p>
+  </section>
+</div>
+
+</div>
+
+<script>
+// Dados da simulação (mesmos da planilha do exercício). "tent" = dias das tentativas SEM resposta.
+// "ctt" = horas entre alerta e primeiro contato; "sup" = horas até a primeira resposta do suporte.
+const DADOS_ORIGINAIS = [
+  { c:'E01', n:'Colégio Horizonte',    ant:180, atu:175, rec:0, tent:'',     canc:'',  sup:3,  ctt:'',  esp:'Não' },
+  { c:'E02', n:'Escola Bom Pastor',    ant:200, atu:140, rec:0, tent:'',     canc:'',  sup:6,  ctt:30,  esp:'Sim' },
+  { c:'E03', n:'Instituto Saber Vivo', ant:150, atu:145, rec:1, tent:'',     canc:'',  sup:24, ctt:6.5, esp:'Sim' },
+  { c:'E04', n:'Colégio São Lucas',    ant:120, atu:116, rec:0, tent:'3',    canc:'',  sup:'', ctt:'',  esp:'Não' },
+  { c:'E05', n:'Escola Girassol',      ant:220, atu:209, rec:0, tent:'5, 9', canc:10,  sup:24, ctt:26,  esp:'Sim' },
+  { c:'E06', n:'Colégio Nova Era',     ant:160, atu:150, rec:0, tent:'1, 9', canc:'',  sup:'', ctt:'',  esp:'Não' },
+  { c:'E07', n:'Escola Nascer Bem',    ant:100, atu:71,  rec:0, tent:'',     canc:'',  sup:'', ctt:'',  esp:'Não' },
+  { c:'E08', n:'Colégio Ponte Viva',   ant:130, atu:80,  rec:1, tent:'4, 6', canc:'',  sup:20, ctt:2,   esp:'Sim' }
+];
+const TOTAL_ESCOLAS = DADOS_ORIGINAIS.length;
+let dados = JSON.parse(JSON.stringify(DADOS_ORIGINAIS));
+
+const $ = (id) => document.getElementById(id);
+const fmt1 = (x) => x.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+function lerParametros() {
+  const num = (id, padrao) => {
+    const v = parseFloat($(id).value);
+    return isNaN(v) ? padrao : v;
+  };
+  return {
+    queda: num('p-queda', 30),
+    rec: num('p-rec', 1),
+    tent: num('p-tent', 2),
+    prazo: Math.max(1, num('p-prazo', 7))
+  };
+}
+
+function diasDe(texto) {
+  return String(texto || '').split(',')
+    .map(s => parseInt(s.trim(), 10))
+    .filter(n => !isNaN(n));
+}
+
+function avaliar(e, p) {
+  const queda = e.ant > 0 ? (e.ant - e.atu) / e.ant * 100 : 0;
+  const sinaisAces = queda >= p.queda;
+  const sinaisRec = Number(e.rec) >= p.rec;
+  const dias = diasDe(e.tent);
+  let sinalCont = false;
+  if (dias.length) {
+    const primeira = Math.min(...dias);
+    const noPrazo = dias.filter(d => d >= primeira && d <= primeira + p.prazo).length;
+    sinalCont = noPrazo >= p.tent;
+  }
+  const sinais = [];
+  if (sinaisAces) sinais.push('acessos');
+  if (sinaisRec) sinais.push('reclamação');
+  if (sinalCont) sinais.push('contatos sem resposta');
+  return { queda, sinais, alerta: sinais.length >= 1 };
+}
+
+function montarTabela() {
+  const corpo = $('corpo');
+  corpo.innerHTML = '';
+  dados.forEach((e, i) => {
+    const tr = document.createElement('tr');
+    tr.dataset.i = i;
+    tr.innerHTML = `
+      <th scope="row" style="font-weight:600">${e.c} ${e.n}</th>
+      <td><input type="number" aria-label="${e.c} acessos do mês anterior" data-campo="ant" value="${e.ant}" min="0"></td>
+      <td><input type="number" aria-label="${e.c} acessos do mês atual" data-campo="atu" value="${e.atu}" min="0"></td>
+      <td data-out="queda"></td>
+      <td><input type="number" aria-label="${e.c} reclamações no mês" data-campo="rec" value="${e.rec}" min="0"></td>
+      <td><input type="text" aria-label="${e.c} dias das tentativas sem resposta" data-campo="tent" value="${e.tent}"></td>
+      <td><input type="number" aria-label="${e.c} dia do cancelamento" data-campo="canc" value="${e.canc}" min="1" max="30"></td>
+      <td><input type="number" aria-label="${e.c} horas entre alerta e contato" data-campo="ctt" value="${e.ctt}" min="0" step="0.5"></td>
+      <td><input type="number" aria-label="${e.c} horas até primeira resposta do suporte" data-campo="sup" value="${e.sup}" min="0" step="0.5"></td>
+      <td class="sinais" data-out="sinais"></td>
+      <td data-out="decisao"></td>
+      <td>${e.esp}</td>
+      <td data-out="confere"></td>`;
+    corpo.appendChild(tr);
+  });
+}
+
+// Um único ouvinte para toda a tabela (não é recriado ao restaurar os dados).
+$('corpo').addEventListener('input', (ev) => {
+  const campo = ev.target.dataset.campo;
+  if (!campo) return;
+  const i = Number(ev.target.closest('tr').dataset.i);
+  dados[i][campo] = ev.target.type === 'number'
+    ? (ev.target.value === '' ? '' : Number(ev.target.value))
+    : ev.target.value;
+  recalcular();
+});
+
+function recalcular() {
+  const p = lerParametros();
+  const linhas = [];
+  let alertas = 0, cancelados = 0, conferem = 0;
+  let somaCtt = 0, nCtt = 0, somaSup = 0, nSup = 0;
+
+  dados.forEach((e, i) => {
+    const r = avaliar(e, p);
+    linhas.push(r);
+    if (r.alerta) alertas++;
+    if (r.alerta && e.ctt !== '' && !isNaN(Number(e.ctt))) { somaCtt += Number(e.ctt); nCtt++; }
+    if (e.sup !== '' && !isNaN(Number(e.sup))) { somaSup += Number(e.sup); nSup++; }
+    const cancelou = e.canc !== '' && Number(e.canc) >= 1 && Number(e.canc) <= 30;
+    if (cancelou) cancelados++;
+    const bate = (r.alerta ? 'Sim' : 'Não') === e.esp;
+    if (bate) conferem++;
+
+    const tr = document.querySelector(`tr[data-i="${i}"]`);
+    if (!tr) return;
+    tr.querySelector('[data-out="queda"]').textContent = fmt1(r.queda) + '%';
+    tr.querySelector('[data-out="sinais"]').textContent = r.sinais.length ? r.sinais.join(', ') : 'nenhum';
+    const dec = tr.querySelector('[data-out="decisao"]');
+    dec.innerHTML = r.alerta
+      ? '<span class="badge b-alert">Sim: gerar alerta</span>'
+      : '<span class="badge b-ok">Não: monitorar</span>';
+    const conf = tr.querySelector('[data-out="confere"]');
+    conf.innerHTML = bate
+      ? '<span class="match m-yes">✓ igual</span>'
+      : '<span class="match m-no">✗ diferente</span>';
+  });
+
+  $('k-alertas').textContent = `${alertas}`;
+  $('k-alertas-s').textContent = `de ${TOTAL_ESCOLAS} escolas`;
+  const churn = cancelados / TOTAL_ESCOLAS * 100;
+  $('k-churn').textContent = fmt1(churn) + '%';
+  $('k-churn-s').textContent = `${cancelados} cancelamento(s) sobre ${TOTAL_ESCOLAS} escolas`;
+  $('k-ctt').textContent = nCtt ? fmt1(somaCtt / nCtt) + ' h' : '–';
+  $('k-sup').textContent = nSup ? fmt1(somaSup / nSup) + ' h' : '–';
+  $('k-conf').textContent = `${conferem} de ${TOTAL_ESCOLAS}`;
+
+  const lista = $('lista-alertas');
+  lista.innerHTML = '';
+  dados.forEach((e, i) => {
+    const r = linhas[i];
+    if (!r.alerta) return;
+    const li = document.createElement('li');
+    li.textContent = `${e.c} ${e.n}: ${r.sinais.join(', ')}.`;
+    lista.appendChild(li);
+  });
+  if (!alertas) {
+    const li = document.createElement('li');
+    li.textContent = 'Nenhuma escola gera alerta com estes parâmetros.';
+    lista.appendChild(li);
+  }
+}
+
+['p-queda', 'p-rec', 'p-tent', 'p-prazo'].forEach(id => $(id).addEventListener('input', recalcular));
+
+$('btn-reset').addEventListener('click', () => {
+  dados = JSON.parse(JSON.stringify(DADOS_ORIGINAIS));
+  ['p-queda', 'p-rec', 'p-tent', 'p-prazo'].forEach((id, k) => {
+    $(id).value = [30, 1, 2, 7][k];
+  });
+  montarTabela();
+  recalcular();
+});
+
+
+montarTabela();
+recalcular();
+</script>
+</body>
+</html>

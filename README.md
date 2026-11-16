@@ -1,0 +1,72 @@
+# GTM Engineering aplicado ao churn: um caso fictício em Análise de Dados
+
+> **Caso fictício.** A empresa EduData, as escolas, as datas e os números deste projeto foram criados para um exercício do curso Análise de Dados e TI aplicada à Gestão (Prepara Portugal). Não são dados reais.
+
+**Autora:** Daniela Ramos, advogada brasileira vivendo em Portugal, em transição para tecnologia e IA.
+
+## O problema
+
+A EduData vende plataformas para escolas privadas. O cenário traz quatro problemas:
+
+- taxa de conversão de leads baixa (4%);
+- CRM desatualizado, com registros duplicados;
+- pesquisa manual sobre os leads;
+- demora para identificar sinais de churn (cancelamento).
+
+Escolhi o último problema. A pergunta de trabalho é: o tempo de resposta do suporte contribui para o risco de cancelamento? O cenário não responde isso, então o fluxo mede a relação em vez de afirmá-la.
+
+## A solução
+
+Um fluxo de monitoramento com ferramentas gratuitas (Google Forms e Google Sheets), em quatro etapas:
+
+1. **Entrada:** reclamações, pedidos de suporte e contatos registrados no Google Forms; acessos vindos de uma exportação da plataforma.
+2. **Organização:** uma linha por escola, identificada por um código único.
+3. **Decisão:** a regra verifica três sinais. Basta um para gerar alerta:
+   - queda de 30% ou mais nos acessos em relação ao mês anterior;
+   - pelo menos uma reclamação no mês;
+   - duas tentativas de contato sem resposta em até 7 dias.
+4. **Ação humana:** o Customer Success entra em contato com a escola e registra a data e a hora.
+
+## O que a simulação mostrou
+
+A simulação usa oito escolas fictícias, cada uma criada para testar um caso da regra. Defini o resultado esperado de cada uma antes de aplicar a regra.
+
+- **8 de 8** decisões iguais ao esperado, inclusive nos casos de fronteira (queda de 29%, segunda tentativa 8 dias depois).
+- **16,1 horas** em média entre o alerta e o primeiro contato (4 alertas).
+- **15,4 horas** em média até a primeira resposta do suporte (5 pedidos).
+- **12,5%** de churn no mês (1 cancelamento em 8 escolas).
+
+## O que a simulação não prova
+
+- Os dados são fictícios. Testam a regra, não o comportamento real das escolas.
+- Com oito escolas, uma escola altera a taxa em 12,5 pontos. Os números servem para comparar tendências, não para concluir.
+- Não há período anterior ao fluxo para comparar. Não é possível dizer se 16,1 horas é um bom tempo.
+- A relação entre atendimento e churn é uma hipótese, que a simulação não testa.
+
+O próximo passo seria um piloto com 6 a 8 escolas reais durante dois meses, com a equipe de Customer Success. Ele não foi executado.
+
+## Conteúdo do repositório
+
+| Arquivo | O que é |
+|---|---|
+| [`index.html`](index.html) | Apresentação, do conceito aos resultados. Abre no navegador. |
+| [`dashboard/index.html`](dashboard/index.html) | Planilha interativa da simulação: os parâmetros e os dados podem ser alterados, e os resultados são recalculados. |
+| [`aula/aula.md`](aula/aula.md) | Aula sobre os conceitos usados (GTM, lead, conversão, churn, regra de sinais, janela de tempo, métricas), com exemplos e exercícios com correção. |
+| [`planilha/`](planilha/) | Dados da simulação e as fórmulas da planilha, em texto. |
+
+## Documentos de origem
+
+- Estudo de caso completo, com as partes 1 a 4 do exercício: [Notion](https://app.notion.com/p/Exerc-cio-GTM-Engineering-Parte-1-Diagn-stico-41690545a6f48162ac8df34102beaee8)
+- Fluxograma do processo: [Miro](https://miro.com/app/board/uXjVEOE7UM4=/?share_link_id=261552555169)
+- Planilha da simulação no Google Sheets: [Planilha](https://docs.google.com/spreadsheets/d/1uRf08qulpb-NUJR8dnVT0MUVtd1jTdcAbuN4e0R8P90/edit?usp=sharing)
+
+## Uso de IA
+
+Usei o Claude como apoio na estrutura, na revisão do texto e na construção das páginas interativas. As escolhas de conteúdo, a regra, o caso e as conclusões são minhas, e consigo explicá-las e defendê-las. Esta nota segue a mesma transparência do estudo de caso no Notion.
+
+## Aprendizados
+
+- Definir o resultado esperado antes de rodar o teste evita ajustar a conclusão ao resultado.
+- Automatizar sobre dados duplicados gera alertas errados. A base precisa vir antes.
+- Um número sem linha de base não diz se é bom ou ruim.
+- Dados fictícios servem para validar a lógica. Para medir efeito, é preciso dado real ao longo do tempo.
