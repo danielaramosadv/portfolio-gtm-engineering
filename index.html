@@ -264,7 +264,7 @@ button:focus-visible, input:focus-visible, .fato:focus-visible { outline: 3px so
   <p>Clique em cada sinal para ver o limite e o motivo.</p>
   <div class="sinais">
     <button class="sinal-btn" aria-expanded="false" aria-controls="d1">
-      <span class="lbl">Queda de acessos</span>Limite: 30% ou mais contra o mês anterior.
+      <span class="lbl">Queda de acessos</span>Limite: 30% ou mais. Compara 1 a 15 de outubro com 1 a 15 de novembro (corte em 15/11).
       <span class="det" id="d1" hidden>Hipótese: o uso em queda pode anteceder o cancelamento.</span>
     </button>
     <button class="sinal-btn" aria-expanded="false" aria-controls="d2">
@@ -285,7 +285,7 @@ button:focus-visible, input:focus-visible, .fato:focus-visible { outline: 3px so
   <p class="eyebrow">3 · Solução</p>
   <h2>Como a planilha chega à decisão: caso E05</h2>
   <ol class="passos">
-    <li><strong>Queda de acessos:</strong> (220 − 209) ÷ 220 = 5%. Menor que 30%: sinal de acessos <em>Não</em>.</li>
+    <li><strong>Queda de acessos:</strong> (100 − 95) ÷ 100 = 5%. Menor que 30%: sinal de acessos <em>Não</em>.</li>
     <li><strong>Reclamações:</strong> nenhuma. Menor que 1: sinal de reclamação <em>Não</em>.</li>
     <li><strong>Tentativas no prazo:</strong> primeira tentativa em 5/11; janela até 12/11; dias 5 e 9 caem nela, são 2. Igual ao mínimo: sinal de contato <em>Sim</em>.</li>
     <li><strong>Decisão:</strong> 0 + 0 + 1 = 1. Um sinal ou mais: <em>gerar alerta</em>.</li>
@@ -311,7 +311,7 @@ button:focus-visible, input:focus-visible, .fato:focus-visible { outline: 3px so
   <h2>Tempos e o caso E05</h2>
   <div class="kpis">
     <div class="card"><p class="n">8 de 8</p><p class="lbl">decisões iguais ao esperado</p></div>
-    <div class="card"><p class="n">16,1 h</p><p class="lbl">alerta até o contato (média de 4)</p></div>
+    <div class="card"><p class="n">10,1 h</p><p class="lbl">alerta até o contato (média de 4)</p></div>
     <div class="card"><p class="n">15,4 h</p><p class="lbl">primeira resposta do suporte (média de 5)</p></div>
     <div class="card"><p class="n">12,5%</p><p class="lbl">churn: 1 de 8 escolas</p></div>
   </div>
@@ -336,7 +336,7 @@ button:focus-visible, input:focus-visible, .fato:focus-visible { outline: 3px so
   <div class="insight"><strong>1. A regra separa bem os casos.</strong> Oito de oito decisões bateram com o esperado, inclusive as de fronteira (E06 e E07).</div>
   <div class="insight"><strong>2. A reclamação dispara sozinha.</strong> E03 gerou alerta só por uma reclamação. Na prática, isso pode gerar muitos alertas por situações simples.</div>
   <div class="insight"><strong>3. O alerta de E05 chegou um dia antes do cancelamento.</strong> O contato foi no mesmo dia. A simulação não diz se foi antes ou depois. É o dado que um piloto precisa medir.</div>
-  <div class="insight"><strong>4. Os dois tempos médios não se comparam.</strong> 16,1 h é de alerta até contato; 15,4 h é do suporte. Sem linha de base, nenhum dos dois diz se é bom.</div>
+  <div class="insight"><strong>4. Os dois tempos médios não se comparam.</strong> 10,1 h é de alerta até contato; 15,4 h é do suporte. Sem linha de base, nenhum dos dois diz se é bom.</div>
   <div class="insight"><strong>5. Uma escola pesa 12,5 pontos.</strong> Com oito escolas, a taxa de churn serve para comparar tendências, não para concluir.</div>
 </section>
 
@@ -345,7 +345,7 @@ button:focus-visible, input:focus-visible, .fato:focus-visible { outline: 3px so
   <p class="eyebrow">4 · Resultados · Métricas</p>
   <h2>Como saber se o fluxo ajuda</h2>
   <div class="grid g3">
-    <div class="card"><p class="lbl">Tempo entre alerta e contato</p><p><strong>Métrica principal.</strong> Mede a demora que o cenário descreve.</p><p class="muted">(30 + 6,5 + 26 + 2) ÷ 4 = 16,1 h</p></div>
+    <div class="card"><p class="lbl">Tempo entre alerta e contato</p><p><strong>Métrica principal.</strong> Mede a demora que o cenário descreve.</p><p class="muted">(6 + 6,5 + 26 + 2) ÷ 4 = 10,1 h</p></div>
     <div class="card"><p class="lbl">Primeira resposta do suporte</p><p>Verifica a hipótese de que o atendimento influencia o churn.</p><p class="muted">(3 + 6 + 24 + 24 + 20) ÷ 5 = 15,4 h</p></div>
     <div class="card"><p class="lbl">Churn mensal</p><p>Cancelamentos ÷ clientes no início do mês × 100.</p><p class="muted">1 ÷ 8 × 100 = 12,5%</p></div>
   </div>
@@ -414,8 +414,8 @@ mostrar(isNaN(inicio) ? 0 : inicio - 1);
 
 // Dados da simulação (mesmos da planilha)
 const ESCOLAS = [
-  { c: 'E01', queda: 2.8,  horas: null, sup: 3 },
-  { c: 'E02', queda: 30.0, horas: 30,   sup: 6 },
+  { c: 'E01', queda: 2.2,  horas: null, sup: 3 },
+  { c: 'E02', queda: 30.0, horas: 6,    sup: 6 },
   { c: 'E03', queda: 3.3,  horas: 6.5,  sup: 24, rec: true },
   { c: 'E04', queda: 3.3,  horas: null, sup: null },
   { c: 'E05', queda: 5.0,  horas: 26,   sup: 24 },
