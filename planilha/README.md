@@ -10,6 +10,7 @@ Os dados abaixo foram digitados à mão, como na planilha do exercício. Em uma 
 | Mínimo de reclamações no mês | 1 | Qualquer reclamação dispara o sinal |
 | Mínimo de tentativas sem resposta | 2 | Duas tentativas sem resposta |
 | Prazo em dias | 7 | Prazo para contar as tentativas |
+| Data de corte dos acessos | 15/11 | Os acessos são comparados de 1 a 15 de outubro com 1 a 15 de novembro (mesmo número de dias) |
 
 ## Escolas
 
@@ -24,18 +25,20 @@ Os dados abaixo foram digitados à mão, como na planilha do exercício. Em uma 
 | E07 | Escola Nascer Bem | Privada | Região B | |
 | E08 | Colégio Ponte Viva | Privada | Região B | |
 
-## Acessos
+## Acessos (1 a 15 de cada mês)
 
-| Código | Outubro | Novembro |
+Dados fictícios. Os dois períodos têm o mesmo número de dias (15), então a comparação é direta, sem média.
+
+| Código | 1 a 15 de outubro | 1 a 15 de novembro |
 |---|---|---|
-| E01 | 180 | 175 |
-| E02 | 200 | 140 |
-| E03 | 150 | 145 |
-| E04 | 120 | 116 |
-| E05 | 220 | 209 |
-| E06 | 160 | 150 |
+| E01 | 90 | 88 |
+| E02 | 100 | 70 |
+| E03 | 90 | 87 |
+| E04 | 60 | 58 |
+| E05 | 100 | 95 |
+| E06 | 80 | 75 |
 | E07 | 100 | 71 |
-| E08 | 130 | 80 |
+| E08 | 65 | 40 |
 
 ## Reclamações (novembro)
 
@@ -67,7 +70,7 @@ Também há um contato respondido da E01 (02/11). Ele não entra na regra, que c
 
 | Código | Queda | Sinal de acessos | Reclamação | Sinal de contato | Sinais | Decisão |
 |---|---|---|---|---|---|---|
-| E01 | 2,8% | Não | Não | Não | 0 | Não: continuar monitorando |
+| E01 | 2,2% | Não | Não | Não | 0 | Não: continuar monitorando |
 | E02 | 30,0% | Sim | Não | Não | 1 | Sim: gerar alerta |
 | E03 | 3,3% | Não | Sim | Não | 1 | Sim: gerar alerta |
 | E04 | 3,3% | Não | Não | Não | 0 | Não: continuar monitorando |
@@ -76,16 +79,20 @@ Também há um contato respondido da E01 (02/11). Ele não entra na regra, que c
 | E07 | 29,0% | Não | Não | Não | 0 | Não: continuar monitorando |
 | E08 | 38,5% | Sim | Sim | Sim | 3 | Sim: gerar alerta |
 
+Todas as oito decisões batem com o resultado esperado (8 de 8).
+
 ## Alertas e tempos
 
 | Escola | Alerta | Primeiro contato | Horas entre alerta e contato |
 |---|---|---|---|
-| E02 | 12/11 às 09:00 | 13/11 às 15:00 | 30 |
+| E02 | 15/11 às 09:00 (data de corte) | 15/11 às 15:00 | 6 |
 | E03 | 11/11 às 10:00 | 11/11 às 16:30 | 6,5 |
 | E05 | 09/11 às 08:00 | 10/11 às 10:00 | 26 |
 | E08 | 10/11 às 09:00 | 10/11 às 11:00 | 2 |
 
-Média: **16,1 horas**.
+Média: **10,1 horas** (4 alertas: 6 + 6,5 + 26 + 2 = 40,5; 40,5 ÷ 4 = 10,1).
+
+O alerta de acessos da E02 só pode sair na data de corte, 15/11. Antes, ele saía em 12/11, quando a comparação ainda usava o mês de novembro incompleto.
 
 ## Churn de novembro
 
@@ -101,7 +108,7 @@ As fórmulas estão escritas em inglês porque a planilha foi configurada em en_
 
 | Coluna | Fórmula (exemplo, linha 2) | Em palavras |
 |---|---|---|
-| Queda (%) | `=IF(C2=0,0,(C2-D2)/C2)` | (mês anterior − mês atual) ÷ mês anterior; zero se o mês anterior for zero |
+| Queda (%) | `=IF(C2=0,0,(C2-D2)/C2)` | (1 a 15 de outubro − 1 a 15 de novembro) ÷ 1 a 15 de outubro; zero se outubro for zero |
 | Sinal de acessos | `=IF(E2>=Parametros!B2,"Sim","Não")` | Sim se a queda for igual ou maior que o limite |
 | Primeira tentativa sem resposta | `=IF(COUNTIFS(Contatos!A:A,A2,Contatos!C:C,"Não")=0,"",MINIFS(Contatos!B:B,Contatos!A:A,A2,Contatos!C:C,"Não"))` | Menor data entre as tentativas sem resposta da escola |
 | Tentativas sem resposta no prazo | `=IF(I2="",0,COUNTIFS(Contatos!A:A,A2,Contatos!C:C,"Não",Contatos!B:B,">="&I2,Contatos!B:B,"<="&(I2+Parametros!B5)))` | Tentativas sem resposta entre a primeira e a primeira + 7 dias |
@@ -109,3 +116,5 @@ As fórmulas estão escritas em inglês porque a planilha foi configurada em en_
 | Decisão | `=IF(L2>=1,"Sim: gerar alerta","Não: continuar monitorando")` | Alerta se houver pelo menos um sinal |
 
 Observação: o parâmetro de queda é guardado como 0,3 (30%). Digitar 30 no lugar quebra a regra.
+
+Na aba Analise, a coluna C é o acesso de 1 a 15 de outubro e a coluna D é o de 1 a 15 de novembro.

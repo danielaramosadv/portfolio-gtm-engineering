@@ -126,8 +126,8 @@ ul.alerts li:last-child { border-bottom: 0; }
       <thead>
         <tr>
           <th scope="col">Escola</th>
-          <th scope="col">Acessos mês anterior</th>
-          <th scope="col">Acessos mês atual</th>
+          <th scope="col">Acessos 1 a 15 de outubro</th>
+          <th scope="col">Acessos 1 a 15 de novembro</th>
           <th scope="col">Queda</th>
           <th scope="col">Reclamações no mês</th>
           <th scope="col">Dias das tentativas sem resposta (ex.: 5, 9)</th>
@@ -156,12 +156,13 @@ ul.alerts li:last-child { border-bottom: 0; }
   </section>
   <section class="panel rules" aria-labelledby="h-regras">
     <h2 id="h-regras">Como a tabela calcula</h2>
-    <p><strong>Queda:</strong> (acessos do mês anterior − acessos do mês atual) ÷ acessos do mês anterior.</p>
+    <p><strong>Queda:</strong> compara os acessos de 1 a 15 de outubro com os de 1 a 15 de novembro (mesmo número de dias). Queda = (outubro − novembro) ÷ outubro.</p>
     <p><strong>Sinal de acessos:</strong> Sim se a queda for igual ou maior que o limite.</p>
     <p><strong>Sinal de reclamação:</strong> Sim se houver pelo menos o mínimo de reclamações.</p>
     <p><strong>Sinal de contato:</strong> pega a primeira tentativa sem resposta e conta quantas caem dentro do prazo a partir dela. Sim se a contagem atingir o mínimo.</p>
     <p><strong>Decisão:</strong> Sim (gerar alerta) se houver pelo menos um sinal.</p>
     <p><strong>Churn:</strong> cancelamentos em novembro ÷ 8 escolas no início do mês × 100.</p>
+    <p><strong>Data de corte:</strong> o sinal de acessos é calculado no dia 15/11. Os demais sinais valem à medida que os registros entram.</p>
     <p class="muted">Com 8 escolas, cada cancelamento pesa 12,5 pontos. Use para comparar tendências, não como medida estatística.</p>
   </section>
 </div>
@@ -172,14 +173,14 @@ ul.alerts li:last-child { border-bottom: 0; }
 // Dados da simulação (mesmos da planilha do exercício). "tent" = dias das tentativas SEM resposta.
 // "ctt" = horas entre alerta e primeiro contato; "sup" = horas até a primeira resposta do suporte.
 const DADOS_ORIGINAIS = [
-  { c:'E01', n:'Colégio Horizonte',    ant:180, atu:175, rec:0, tent:'',     canc:'',  sup:3,  ctt:'',  esp:'Não' },
-  { c:'E02', n:'Escola Bom Pastor',    ant:200, atu:140, rec:0, tent:'',     canc:'',  sup:6,  ctt:30,  esp:'Sim' },
-  { c:'E03', n:'Instituto Saber Vivo', ant:150, atu:145, rec:1, tent:'',     canc:'',  sup:24, ctt:6.5, esp:'Sim' },
-  { c:'E04', n:'Colégio São Lucas',    ant:120, atu:116, rec:0, tent:'3',    canc:'',  sup:'', ctt:'',  esp:'Não' },
-  { c:'E05', n:'Escola Girassol',      ant:220, atu:209, rec:0, tent:'5, 9', canc:10,  sup:24, ctt:26,  esp:'Sim' },
-  { c:'E06', n:'Colégio Nova Era',     ant:160, atu:150, rec:0, tent:'1, 9', canc:'',  sup:'', ctt:'',  esp:'Não' },
-  { c:'E07', n:'Escola Nascer Bem',    ant:100, atu:71,  rec:0, tent:'',     canc:'',  sup:'', ctt:'',  esp:'Não' },
-  { c:'E08', n:'Colégio Ponte Viva',   ant:130, atu:80,  rec:1, tent:'4, 6', canc:'',  sup:20, ctt:2,   esp:'Sim' }
+  { c:'E01', n:'Colégio Horizonte',    ant:90,  atu:88, rec:0, tent:'',     canc:'',  sup:3,  ctt:'',  esp:'Não' },
+  { c:'E02', n:'Escola Bom Pastor',    ant:100, atu:70, rec:0, tent:'',     canc:'',  sup:6,  ctt:6,   esp:'Sim' },
+  { c:'E03', n:'Instituto Saber Vivo', ant:90,  atu:87, rec:1, tent:'',     canc:'',  sup:24, ctt:6.5, esp:'Sim' },
+  { c:'E04', n:'Colégio São Lucas',    ant:60,  atu:58, rec:0, tent:'3',    canc:'',  sup:'', ctt:'',  esp:'Não' },
+  { c:'E05', n:'Escola Girassol',      ant:100, atu:95, rec:0, tent:'5, 9', canc:10,  sup:24, ctt:26,  esp:'Sim' },
+  { c:'E06', n:'Colégio Nova Era',     ant:80,  atu:75, rec:0, tent:'1, 9', canc:'',  sup:'', ctt:'',  esp:'Não' },
+  { c:'E07', n:'Escola Nascer Bem',    ant:100, atu:71, rec:0, tent:'',     canc:'',  sup:'', ctt:'',  esp:'Não' },
+  { c:'E08', n:'Colégio Ponte Viva',   ant:65,  atu:40, rec:1, tent:'4, 6', canc:'',  sup:20, ctt:2,   esp:'Sim' }
 ];
 const TOTAL_ESCOLAS = DADOS_ORIGINAIS.length;
 let dados = JSON.parse(JSON.stringify(DADOS_ORIGINAIS));
@@ -232,8 +233,8 @@ function montarTabela() {
     tr.dataset.i = i;
     tr.innerHTML = `
       <th scope="row" style="font-weight:600">${e.c} ${e.n}</th>
-      <td><input type="number" aria-label="${e.c} acessos do mês anterior" data-campo="ant" value="${e.ant}" min="0"></td>
-      <td><input type="number" aria-label="${e.c} acessos do mês atual" data-campo="atu" value="${e.atu}" min="0"></td>
+      <td><input type="number" aria-label="${e.c} acessos de 1 a 15 de outubro" data-campo="ant" value="${e.ant}" min="0"></td>
+      <td><input type="number" aria-label="${e.c} acessos de 1 a 15 de novembro" data-campo="atu" value="${e.atu}" min="0"></td>
       <td data-out="queda"></td>
       <td><input type="number" aria-label="${e.c} reclamações no mês" data-campo="rec" value="${e.rec}" min="0"></td>
       <td><input type="text" aria-label="${e.c} dias das tentativas sem resposta" data-campo="tent" value="${e.tent}"></td>

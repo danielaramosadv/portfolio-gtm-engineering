@@ -28,7 +28,7 @@ Um fluxo de monitoramento com ferramentas gratuitas (Google Forms e Google Sheet
 1. **Entrada:** reclamações, pedidos de suporte e contatos registrados no Google Forms; acessos vindos de uma exportação da plataforma.
 2. **Organização:** uma linha por escola, identificada por um código único.
 3. **Decisão:** a regra verifica três sinais. Basta um para gerar alerta:
-   - queda de 30% ou mais nos acessos em relação ao mês anterior;
+   - queda de 30% ou mais nos acessos de 1 a 15 do mês em relação ao mesmo período do mês anterior (dia de corte: 15);
    - pelo menos uma reclamação no mês;
    - duas tentativas de contato sem resposta em até 7 dias.
 4. **Ação humana:** o Customer Success entra em contato com a escola e registra a data e a hora.
@@ -41,7 +41,7 @@ Um fluxo de monitoramento com ferramentas gratuitas (Google Forms e Google Sheet
 A simulação usa oito escolas fictícias, cada uma criada para testar um caso da regra. Defini o resultado esperado de cada uma antes de aplicar a regra.
 
 - **8 de 8** decisões iguais ao esperado, inclusive nos casos de fronteira (queda de 29%, segunda tentativa 8 dias depois).
-- **16,1 horas** em média entre o alerta e o primeiro contato (4 alertas).
+- **10,1 horas** em média entre o alerta e o primeiro contato (4 alertas).
 - **15,4 horas** em média até a primeira resposta do suporte (5 pedidos).
 - **12,5%** de churn no mês (1 cancelamento em 8 escolas).
 
@@ -49,7 +49,7 @@ A simulação usa oito escolas fictícias, cada uma criada para testar um caso d
 
 - Os dados são fictícios. Testam a regra, não o comportamento real das escolas.
 - Com oito escolas, uma escola altera a taxa em 12,5 pontos. Os números servem para comparar tendências, não para concluir.
-- Não há período anterior ao fluxo para comparar. Não é possível dizer se 16,1 horas é um bom tempo.
+- Não há período anterior ao fluxo para comparar. Não é possível dizer se 10,1 horas é um bom tempo.
 - A relação entre atendimento e churn é uma hipótese, que a simulação não testa.
 
 O próximo passo seria um piloto com 6 a 8 escolas reais durante dois meses, com a equipe de Customer Success. Ele não foi executado.
@@ -76,7 +76,7 @@ Usei o Claude como apoio na estrutura, na revisão do texto e na construção da
 
 Com base no feedback do professor, estes são os pontos que mudaria numa segunda versão:
 
-- **Comparar os últimos 30 dias com os 30 dias anteriores.** Comparar com o mês anterior fechado gera alerta errado quando o alerta sai no meio do mês, porque o mês atual ainda está incompleto.
+- **Comparar o mesmo número de dias.** Já fiz esta mudança: os acessos são comparados de 1 a 15 de outubro com 1 a 15 de novembro, com corte no dia 15. Assim o mês incompleto não entra na conta. Uma versão mais completa usaria os últimos 30 dias, mas exige acessos diários, que a simulação não tem.
 - **Usar uma janela móvel nos contatos.** Hoje a janela parte da primeira tentativa sem resposta. Uma janela recalculada a cada novo registro mostra melhor a insistência recente.
 - **Registrar o resultado de cada contato.** Hoje registro só a data e a hora do primeiro contato. Registrar se a escola respondeu, agendou ou cancelou permitiria medir o efeito do contato, não só o tempo.
 
