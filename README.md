@@ -19,6 +19,8 @@ A EduData vende plataformas para escolas privadas. O cenário traz quatro proble
 
 Escolhi o último problema. A pergunta de trabalho é: o tempo de resposta do suporte contribui para o risco de cancelamento? O cenário não responde isso, então o fluxo mede a relação em vez de afirmá-la.
 
+Na Parte 1, a primeira ação que eu recomendo é limpar o CRM, porque sem cadastro único nenhum alerta é confiável. Escolhi o churn porque o exercício pedia uma das ações, e o fluxo de churn já nasce com código único por escola. Assim, consigo mostrar o fluxo completo num recorte pequeno. Com o CRM limpo, o próximo passo seria aplicar o mesmo fluxo à base inteira.
+
 ## A solução
 
 Um fluxo de monitoramento com ferramentas gratuitas (Google Forms e Google Sheets), em quatro etapas:
@@ -62,7 +64,7 @@ O próximo passo seria um piloto com 6 a 8 escolas reais durante dois meses, com
 
 ## Documentos de origem
 
-- Estudo de caso completo, com as partes 1 a 4 do exercício: [Notion](https://app.notion.com/p/Exerc-cio-GTM-Engineering-Parte-1-Diagn-stico-41690545a6f48162ac8df34102beaee8)
+- Estudo de caso completo, com as partes 1 a 4 do exercício: [Notion](https://quasar-acoustic-ae7.notion.site/Exerc-cio-GTM-Engineering-Parte-1-Diagn-stico-41690545a6f48162ac8df34102beaee8)
 - Fluxograma do processo: [Miro](https://miro.com/app/board/uXjVEOE7UM4=/?share_link_id=352690632729)
 - Planilha da simulação no Google Sheets: [Planilha](https://docs.google.com/spreadsheets/d/1uRf08qulpb-NUJR8dnVT0MUVtd1jTdcAbuN4e0R8P90/edit?usp=sharing)
 
@@ -74,7 +76,7 @@ Usei o Claude como apoio na estrutura, na revisão do texto e na construção da
 
 Com base no feedback do professor, estes são os pontos que mudaria numa segunda versão:
 
-- **Comparar os acessos com mais de um mês.** Comparar só com o mês anterior pode gerar alerta por uma variação pontual. Uma média de três meses reduziria esse ruído.
+- **Comparar os últimos 30 dias com os 30 dias anteriores.** Comparar com o mês anterior fechado gera alerta errado quando o alerta sai no meio do mês, porque o mês atual ainda está incompleto.
 - **Usar uma janela móvel nos contatos.** Hoje a janela parte da primeira tentativa sem resposta. Uma janela recalculada a cada novo registro mostra melhor a insistência recente.
 - **Registrar o resultado de cada contato.** Hoje registro só a data e a hora do primeiro contato. Registrar se a escola respondeu, agendou ou cancelou permitiria medir o efeito do contato, não só o tempo.
 
