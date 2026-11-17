@@ -4,6 +4,10 @@
 
 **Autora:** Daniela Ramos. Bacharel em Direito (OAB/Brasil), com experiência em gestão de processos e coordenação de equipes; estudante de dados e IA.
 
+**Apresentação online:** https://danielaramosadv.github.io/portfolio-gtm-engineering/  
+**Dashboard:** https://danielaramosadv.github.io/portfolio-gtm-engineering/dashboard/  
+**LinkedIn:** https://www.linkedin.com/in/danielaramosadv
+
 ## O problema
 
 A EduData vende plataformas para escolas privadas. O cenário traz quatro problemas:
@@ -29,6 +33,9 @@ Um fluxo de monitoramento com ferramentas gratuitas (Google Forms e Google Sheet
 
 ## O que a simulação mostrou
 
+![Dashboard da simulação: parâmetros, indicadores e tabela de escolas](imagens/dashboard.png)
+
+
 A simulação usa oito escolas fictícias, cada uma criada para testar um caso da regra. Defini o resultado esperado de cada uma antes de aplicar a regra.
 
 - **8 de 8** decisões iguais ao esperado, inclusive nos casos de fronteira (queda de 29%, segunda tentativa 8 dias depois).
@@ -49,7 +56,7 @@ O próximo passo seria um piloto com 6 a 8 escolas reais durante dois meses, com
 
 | Arquivo | O que é |
 |---|---|
-| [`index.html`](index.html) | Apresentação, do conceito aos resultados. Abre no navegador. |
+| [`index.html`](index.html) | Apresentação, do conceito aos resultados. Versão online: [link do GitHub Pages](https://danielaramosadv.github.io/portfolio-gtm-engineering/). |
 | [`dashboard/index.html`](dashboard/index.html) | Planilha interativa da simulação: os parâmetros e os dados podem ser alterados, e os resultados são recalculados. |
 | [`planilha/`](planilha/) | Dados da simulação e as fórmulas da planilha, em texto. |
 
@@ -62,6 +69,14 @@ O próximo passo seria um piloto com 6 a 8 escolas reais durante dois meses, com
 ## Uso de IA
 
 Usei o Claude como apoio na estrutura, na revisão do texto e na construção das páginas interativas. As escolhas de conteúdo, a regra, o caso e as conclusões são minhas, e consigo explicá-las e defendê-las. Esta nota segue a mesma transparência do estudo de caso no Notion.
+
+## Melhorias que eu faria
+
+Com base no feedback do professor, estes são os pontos que mudaria numa segunda versão:
+
+- **Comparar os acessos com mais de um mês.** Comparar só com o mês anterior pode gerar alerta por uma variação pontual. Uma média de três meses reduziria esse ruído.
+- **Usar uma janela móvel nos contatos.** Hoje a janela parte da primeira tentativa sem resposta. Uma janela recalculada a cada novo registro mostra melhor a insistência recente.
+- **Registrar o resultado de cada contato.** Hoje registro só a data e a hora do primeiro contato. Registrar se a escola respondeu, agendou ou cancelou permitiria medir o efeito do contato, não só o tempo.
 
 ## Aprendizados
 
