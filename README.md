@@ -65,7 +65,7 @@ O próximo passo seria um piloto com 6 a 8 escolas reais durante dois meses, com
 ## Documentos de origem
 
 - Estudo de caso completo, com as partes 1 a 4 do exercício: [Notion](https://quasar-acoustic-ae7.notion.site/Exerc-cio-GTM-Engineering-Parte-1-Diagn-stico-41690545a6f48162ac8df34102beaee8)
-- Fluxograma do processo: [Miro](https://miro.com/app/board/uXjVEOE7UM4=/?share_link_id=352690632729)
+- Fluxograma do processo: [Miro](https://miro.com/app/board/uXjVEOE7UM4=/?share_link_id=102873765003)
 - Planilha da simulação no Google Sheets: [Planilha](https://docs.google.com/spreadsheets/d/1uRf08qulpb-NUJR8dnVT0MUVtd1jTdcAbuN4e0R8P90/edit?usp=sharing)
 
 ## Uso de IA
